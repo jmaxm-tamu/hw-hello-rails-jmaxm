@@ -1,4 +1,44 @@
-<h1>Editing movie</h1>
+<style>
+  /* This targets the body element of the whole page */
+  body {
+    background-color: #e9e4e9;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Any other global page elements */
+  .container {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    font-family: 'Georgia', Arial, sans-serif;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<div class="container">
+<h1>Editing Movie:</h1>
 
 <%= render "form", movie: @movie %>
 
@@ -7,4 +47,6 @@
 <div>
   <%= link_to "Show this movie", @movie %> |
   <%= link_to "Back to movies", movies_path %>
+</div>
+
 </div>
