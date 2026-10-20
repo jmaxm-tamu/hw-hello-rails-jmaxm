@@ -1,3 +1,201 @@
+<style>
+  /* This targets the body element of the whole page */
+  body {
+    background-color: #e9e4e9;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Any other global page elements */
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<div class="container">
+<p style="color: green"><%= notice %></p>
+
+<div class="centering">
+<h1>RottenPotatoes</h1>
+</div>
+
+<style>
+  #moviesTable table {
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 12px 10px;
+  }
+
+  #moviesTable th {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 15px;
+  }
+  
+  #moviesTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  /* Currently sorted column: ascending */
+  #moviesTable th.sorted-asc {
+    background-color: #c8e6c9;
+  }
+
+  /* Currently sorted column: descending */
+  #moviesTable th.sorted-desc {
+    background-color: #fbceab;
+  }
+
+  #moviesTable th:focus {
+    outline: 2px solid #333;
+    outline-offset: 2px;
+  }
+</style>
+
+<div class="centering">
+<table id="moviesTable">
+  <thead>
+    <tr>
+      <th scope="col" tabindex="0" aria-sort="none"
+          onclick="sortTable(0)"
+          onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); sortTable(0); }">
+        Title <span class="sort-indicator" aria-hidden="true">↕</span>
+        <span class="sr-only sort-description"></span>
+      </th>
+      <th scope="col" tabindex="0" aria-sort="none"
+          onclick="sortTable(1)"
+          onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); sortTable(1); }">
+        Rating <span class="sort-indicator" aria-hidden="true">↕</span>
+        <span class="sr-only sort-description"></span>
+      </th>
+      <th scope="col" tabindex="0" aria-sort="none"
+          onclick="sortTable(2)"
+          onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); sortTable(2); }">
+        Release Date <span class="sort-indicator" aria-hidden="true">↕</span>
+        <span class="sr-only sort-description"></span>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @movies.each do |movie| %>
+      <tr>
+        <td><%= link_to movie.title, movie %></td>
+        <td><%= movie.rating %></td>
+        <td><%= movie.release_date %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<div class="centering">
+<p><%= link_to "Add a new movie", new_movie_path %></p>
+</div>
+</div>
+
+<script>
+  let currentSortColumn = null;
+  let currentSortDirection = null;
+
+  function sortTable(columnIndex) {
+    const table = document.getElementById("moviesTable");
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const headers = table.tHead.rows[0].cells;
+
+    // Toggle direction when the same column is clicked.
+    if (currentSortColumn === columnIndex) {
+      currentSortDirection =
+        currentSortDirection === "asc" ? "desc" : "asc";
+    } else {
+      currentSortColumn = columnIndex;
+      currentSortDirection = "asc";
+    }
+
+    const direction = currentSortDirection === "asc" ? 1 : -1;
+
+    rows.sort((rowA, rowB) => {
+      let valueA = rowA.cells[columnIndex].textContent.trim();
+      let valueB = rowB.cells[columnIndex].textContent.trim();
+
+      if (columnIndex != 2) {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+
+      if (valueA < valueB) return -1 * direction;
+      if (valueA > valueB) return 1 * direction;
+      return 0;
+    });
+
+    rows.forEach(row => tbody.appendChild(row));
+
+    // Update highlighting, indicators, and accessibility attributes.
+    Array.from(headers).forEach((header, index) => {
+      header.classList.remove("sorted-asc", "sorted-desc");
+      header.setAttribute("aria-sort", "none");
+
+      const indicator = header.querySelector(".sort-indicator");
+      const description = header.querySelector(".sort-description");
+
+      indicator.textContent = "↕";
+      description.textContent = "";
+      
+      if (index === currentSortColumn) {
+        header.classList.add(
+          currentSortDirection === "asc" ? "sorted-asc" : "sorted-desc"
+        );
+
+        header.setAttribute(
+          "aria-sort",
+          currentSortDirection === "asc" ? "ascending" : "descending"
+        );
+
+        indicator.textContent =
+          currentSortDirection === "asc" ? "▲" : "▼";
+
+        description.textContent =
+          currentSortDirection === "asc"
+            ? " Sorted ascending"
+            : " Sorted descending";
+      }
+    });
+  }
+</script>
+
+
+
+
+
+
+
+
+
+<% if false %>
+// movie display v2
 <p style="color: green"><%= notice %></p>
 
 <h1>Movies</h1>
@@ -63,11 +261,7 @@
   }
 </script>
 
-
-
-
-<% if false %>
-# Old movie display
+// movie display v1
 <div id="movies">
   <% @movies.each do |movie| %>
     <%= render movie %>
