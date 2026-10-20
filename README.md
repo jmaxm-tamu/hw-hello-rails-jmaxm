@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**Link to deployed app:** https://rotten-potatoes-jmaxm-5fc639201654.herokuapp.com/movies
 
-Things you may want to cover:
+This is an implementation of the RottenPotatoes app from CSCE 606.
 
-* Ruby version
+This app supports:
 
-* System dependencies
+* Adding new movies to database
 
-* Configuration
+* Editing existing movies
 
-* Database creation
+* Deleting movies
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Sorting movie list by title, rating, or release date, in ascending or descending order
