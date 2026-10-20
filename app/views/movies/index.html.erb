@@ -2,12 +2,12 @@
 
 <h1>Movies</h1>
 
-<table>
+<table id="movies-table">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Rating</th>
-      <th>Release Date</th>
+      <th onclick="sortTable(0)">Title &#8597;</th>
+      <th onclick="sortTable(1)">Rating &#8597;</th>
+      <th onclick="sortTable(2)">Release Date &#8597;</th>
     </tr>
   </thead>
   <tbody>
@@ -20,6 +20,51 @@
     <% end %>
   </tbody>
 </table>
+
+<%= link_to "Add a new movie", new_movie_path %>
+
+
+<script>
+  // Track the sorting direction for each column.
+  const sortDirections = {};
+
+  function sortTable(columnIndex) {
+    const table = document.getElementById("movies-table");
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+
+    // Toggle between ascending and descending order.
+    sortDirections[columnIndex] =
+      sortDirections[columnIndex] === "asc" ? "desc" : "asc";
+
+    const direction = sortDirections[columnIndex] === "asc" ? 1 : -1;
+
+    rows.sort((rowA, rowB) => {
+      let valueA = rowA.cells[columnIndex].textContent.trim();
+      let valueB = rowB.cells[columnIndex].textContent.trim();
+
+      if (columnIndex === 2) {
+        // Sort release dates chronologically.
+        // valueA = new Date(valueA).getTime();
+        // valueB = new Date(valueB).getTime();
+      } else {
+        // Sort titles and ratings alphabetically.
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+
+      if (valueA < valueB) return -1 * direction;
+      if (valueA > valueB) return 1 * direction;
+      return 0;
+    });
+
+    // Reinsert rows in their new order.
+    rows.forEach(row => tbody.appendChild(row));
+  }
+</script>
+
+
+
 
 <% if false %>
 # Old movie display
